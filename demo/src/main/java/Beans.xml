@@ -8,7 +8,7 @@
    <bean id="dataSource" 
       class="org.springframework.jdbc.datasource.DriverManagerDataSource">
       <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-      <property name="url" value="jdbc:sqlserver://localhost;database=TESTDATABASE;"/>
+      <property name="url" value="jdbc:sqlserver://localhost;database=FINAL_PROJECT;"/>
       <property name="username" value="sa"/>
       <property name="password" value="Aa11111111"/>
    </bean>
@@ -16,6 +16,11 @@
    <!-- Definition for SchoolHighterJDBCTemplate bean -->
    <bean id="schoolHighterJDBCTemplate" 
       class="com.example.demo.SchoolHighterJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <!-- Definition for AQIJDBCTemplate bean -->
+   <bean id="AQIJDBCTemplate" 
+      class="com.example.demo.AQIJDBCTemplate">
       <property name="dataSource"  ref="dataSource" />    
    </bean>
 

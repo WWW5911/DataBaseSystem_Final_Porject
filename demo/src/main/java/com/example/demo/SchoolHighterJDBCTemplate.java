@@ -3,20 +3,23 @@ package com.example.demo;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
-
+import com.example.schoolHighter.*;
 public class SchoolHighterJDBCTemplate implements SchoolHighterDAO{
+    @SuppressWarnings("unused")
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplateObject; 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
+    
     public void create(String name, Integer grade) {
         String SQL = "insert into Highschooler (name, grade) values (?, ?)";     
         jdbcTemplateObject.update( SQL, name, grade);
         System.out.println("Created Record Name = " + name + " Age = " + grade);
         return;
     }
+    @SuppressWarnings("deprecation")
     public SchoolHighter getSchoolHighter(Integer id) {
         String SQL = "select * from Highschooler where id = ?";
         SchoolHighter schoolHighter = jdbcTemplateObject.queryForObject(SQL, new Object[]{id}, new SchoolHighterMapper());
@@ -35,7 +38,7 @@ public class SchoolHighterJDBCTemplate implements SchoolHighterDAO{
         return;
     }
     public void update(Integer id, Integer grade){
-        String SQL = "update Highschooler set age = ? where id = ?";
+        String SQL = "update Highschooler set grade = ? where id = ?";
         jdbcTemplateObject.update(SQL, grade, id);
         System.out.println("Updated Record with ID = " + id );
         return;
