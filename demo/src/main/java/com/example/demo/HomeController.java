@@ -15,18 +15,21 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.example.schoolHighter.*;
 import com.example.AQI.*;
-
-
+import com.example.Weather.*;
+import com.example.Restaurant.*;
 
 @RestController
 public class HomeController {
     ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
     SchoolHighterJDBCTemplate schoolHighterJDBCTemplate = (SchoolHighterJDBCTemplate) context.getBean("schoolHighterJDBCTemplate");
     AQIJDBCTemplate aqiJDBCTemplate = (AQIJDBCTemplate) context.getBean("AQIJDBCTemplate");
-
+    WeatherJDBCTemplate weatherJDBCTemplate = (WeatherJDBCTemplate) context.getBean("WeatherJDBCTemplate");
+    RestaurantJDBCTemplate restaurantJDBCTemplate = (RestaurantJDBCTemplate) context.getBean("RestaurantJDBCTemplate");
 
     List<SchoolHighter> students = schoolHighterJDBCTemplate.listSchoolHighters();
     List<AQI> aqis = aqiJDBCTemplate.listAQIs();
+    List<Weather> weathers = weatherJDBCTemplate.listWeathers();
+    List<Restaurant> restaurant = restaurantJDBCTemplate.listRestaurants();
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -69,7 +72,7 @@ public class HomeController {
     }
 
     @RequestMapping(path = "/api/AQI/{id}")
-    public String getID( @PathVariable("id") int id  ){
+    public String getAQIID( @PathVariable("id") int id  ){
         AQI aqi = aqiJDBCTemplate.getAQI(id);
         return "ID : " + aqi.getSiteId() + ", SiteName : " + aqi.getSiteName() + ", S_city : " + aqi.getS_city()
                 + " S_latitude : " + aqi.getS_latitude() + " S_longitude : " + aqi.getS_longitude() + " AQI : " 
@@ -85,6 +88,46 @@ public class HomeController {
             str += "ID : " + aqi.getSiteId() + ", SiteName : " + aqi.getSiteName() + ", S_city : " + aqi.getS_city()
             + " S_latitude : " + aqi.getS_latitude() + " S_longitude : " + aqi.getS_longitude() + " AQI : " 
             + aqi.getAQI() + " Status : " + aqi.getStatus() + " PM25 : " + aqi.getPM25() +"\n" ;
+        return str;
+    }
+
+    @RequestMapping(path = "/api/Weather/{id}")
+    public String getWeatherID( @PathVariable("id") int id  ){
+        Weather weather = weatherJDBCTemplate.getWeather(id);
+        return "ID = " + weather.getID() + " date = " + weather.getDate() + " startTime = " + weather.getStartTime() + " endTime = " + weather.getEndTime() 
+        + " city = " + weather.getCity() + " District = " + weather.getDistrict() + " Wx = " + weather.getWx() + " pop = " + weather.getPop() 
+        + " temperature = " + weather.getTemperature() + " AvgAt = " + weather.getAvgAt();
+    }
+
+    @RequestMapping(path = "/api/Weather/list")
+    public String getWeatherALL(){
+        List<Weather> li = weatherJDBCTemplate.listWeathers();
+        String str = "";
+        li.sort(Comparator.comparing(Weather::getID));
+        for(Weather weather : li)
+            str += "ID = " + weather.getID() + " date = " + weather.getDate() + " startTime = " + weather.getStartTime() + " endTime = " + weather.getEndTime() 
+            + " city = " + weather.getCity() + " District = " + weather.getDistrict() + " Wx = " + weather.getWx() + " pop = " + weather.getPop() 
+            + " temperature = " + weather.getTemperature() + " AvgAt = " + weather.getAvgAt() +"\n" ;
+        return str;
+    }
+
+    @RequestMapping(path = "/api/Restaurant/{id}")
+    public String getRestaurantID( @PathVariable("id") int id  ){
+        Restaurant restaurant = restaurantJDBCTemplate.getRestaurant(id);
+        return "ID : " + restaurant.getID() + ", name : " + restaurant.getName() + ", City : " + restaurant.getCity()+ " District : " + restaurant.getDistrict() 
+                + " latitude : " + restaurant.getLatitude() + " longitude : " + restaurant.getLongitude() + " Address : " 
+                + restaurant.getAddress() + " rating : " + restaurant.getRating();
+    }
+
+    @RequestMapping(path = "/api/Restaurant/list")
+    public String getRestaurantALL(){
+        List<Restaurant> li = restaurantJDBCTemplate.listRestaurants();
+        String str = "";
+        li.sort(Comparator.comparing(Restaurant::getID));
+        for(Restaurant restaurant : li)
+            str += "ID : " + restaurant.getID() + ", name : " + restaurant.getName() + ", City : " + restaurant.getCity()+ " District : " + restaurant.getDistrict() 
+            + " latitude : " + restaurant.getLatitude() + " longitude : " + restaurant.getLongitude() + " Address : " 
+            + restaurant.getAddress() + " rating : " + restaurant.getRating() +"\n" ;
         return str;
     }
 

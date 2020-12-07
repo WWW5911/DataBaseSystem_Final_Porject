@@ -23,5 +23,16 @@
       class="com.example.demo.AQIJDBCTemplate">
       <property name="dataSource"  ref="dataSource" />    
    </bean>
+   <!-- Definition for WeatherJDBCTemplate bean -->
+   <bean id="WeatherJDBCTemplate" 
+      class="com.example.demo.WeatherJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <!-- Definition for RestaurantJDBCTemplate bean -->
+   <bean id="RestaurantJDBCTemplate" 
+      class="com.example.demo.RestaurantJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+
 
 </beans>
