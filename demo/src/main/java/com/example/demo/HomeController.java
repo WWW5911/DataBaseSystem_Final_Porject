@@ -17,6 +17,8 @@ import com.example.schoolHighter.*;
 import com.example.AQI.*;
 import com.example.Weather.*;
 import com.example.Restaurant.*;
+import com.example.ServiceTime.*;
+import com.example.Service.*;
 
 @RestController
 public class HomeController {
@@ -25,11 +27,15 @@ public class HomeController {
     AQIJDBCTemplate aqiJDBCTemplate = (AQIJDBCTemplate) context.getBean("AQIJDBCTemplate");
     WeatherJDBCTemplate weatherJDBCTemplate = (WeatherJDBCTemplate) context.getBean("WeatherJDBCTemplate");
     RestaurantJDBCTemplate restaurantJDBCTemplate = (RestaurantJDBCTemplate) context.getBean("RestaurantJDBCTemplate");
+    ServiceTimeJDBCTemplate serviceTimeJDBCTemplate = (ServiceTimeJDBCTemplate) context.getBean("ServiceTimeJDBCTemplate");
+    ServiceJDBCTemplate serviceJDBCTemplate = (ServiceJDBCTemplate) context.getBean("ServiceJDBCTemplate");
 
     List<SchoolHighter> students = schoolHighterJDBCTemplate.listSchoolHighters();
     List<AQI> aqis = aqiJDBCTemplate.listAQIs();
     List<Weather> weathers = weatherJDBCTemplate.listWeathers();
-    List<Restaurant> restaurant = restaurantJDBCTemplate.listRestaurants();
+    List<Restaurant> restaurants = restaurantJDBCTemplate.listRestaurants();
+    List<ServiceTime> serviceTimes = serviceTimeJDBCTemplate.listServiceTimes();
+    List<Service> services = serviceJDBCTemplate.listServices();
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -38,12 +44,12 @@ public class HomeController {
     
     @RequestMapping("")
     public String hello() {
-        File index = new File("demo\\src\\main\\java\\web\\index.html");
+        File index = new File("src\\main\\java\\web\\index.html");
         String path = index.getAbsolutePath();
         try {
             return Files.readString(Paths.get(path));
         } catch (IOException e) {
-            return "there is nothing";
+            return path;
         }
     }
     @RequestMapping("/css/{file}")
@@ -131,4 +137,42 @@ public class HomeController {
         return str;
     }
 
+    @RequestMapping(path = "/api/ServiceTime/{id}")
+    public String getServiceTimeID( @PathVariable("id") int id  ){
+        ServiceTime serviceTime = serviceTimeJDBCTemplate.getServiceTime(id);
+        return "ID = " + serviceTime.getID() + " week = " + serviceTime.getWeek() + " openTime = " + serviceTime.getOpenTime() + " closeTime = " + serviceTime.getCloseTime();
+    }
+    @RequestMapping(path = "/api/ServiceTime/list")
+    public String getServiceTimeALL(){
+        List<ServiceTime> li = serviceTimeJDBCTemplate.listServiceTimes();
+        String str = "";
+        li.sort(Comparator.comparing(ServiceTime::getID));
+        for(ServiceTime serviceTime : li)
+            str += "ID = " + serviceTime.getID() + " week = " + serviceTime.getWeek() + " openTime = " + serviceTime.getOpenTime() + " closeTime = " + serviceTime.getCloseTime() +"\n" ;
+        return str;
+    }
+
+    @RequestMapping(path = "/api/Service/S/{id}")
+    public String getServiceS_ID( @PathVariable("id") int id  ){
+        Service service = serviceJDBCTemplate.getService(id);
+        return "S_ID : " + service.getS_ID() + ", R_ID : " + service.getR_ID() ;
+    }
+    @RequestMapping(path = "/api/Service/R/{id}")
+    public String getServiceR_ID( @PathVariable("id") int id  ){
+        List<Service> li = serviceJDBCTemplate.getServiceR(id);
+        String str = "";
+        li.sort(Comparator.comparing(Service::getS_ID));
+        for(Service service : li)
+            str += "R_ID : " + service.getR_ID() + ", S_ID : " + service.getS_ID() +"\n" ;
+        return str;
+    }
+    @RequestMapping(path = "/api/Service/list")
+    public String getServiceALL(){
+        List<Service> li = serviceJDBCTemplate.listServices();
+        String str = "";
+        li.sort(Comparator.comparing(Service::getR_ID));
+        for(Service service : li)
+            str += "S_ID : " + service.getS_ID() + ", R_ID : " + service.getR_ID() +"\n" ;
+        return str;
+    }
 }
