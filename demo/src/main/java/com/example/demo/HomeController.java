@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
 import org.springframework.context.ApplicationContext;
@@ -37,6 +39,8 @@ public class HomeController {
     List<ServiceTime> serviceTimes = serviceTimeJDBCTemplate.listServiceTimes();
     List<Service> services = serviceJDBCTemplate.listServices();
 
+    AES_CBC_PK5 aPk5 = new AES_CBC_PK5();
+
     public static void main(String[] args) {
         // TODO Auto-generated method stub
 
@@ -51,6 +55,14 @@ public class HomeController {
         } catch (IOException e) {
             return path;
         }
+    }
+    @RequestMapping("/en/{str}")
+    public String enTest(@PathVariable("str") String str ) throws Exception {
+        return Base64.getEncoder().encodeToString( aPk5.Encrypt(str)).replace('/', '@');
+    }
+    @RequestMapping("/de/{str}")
+    public String deTest(@PathVariable("str") String str ) throws Exception {
+        return aPk5.Decrypt( str.replace('@', '/') );
     }
     @RequestMapping("/css/{file}")
     public String getCss(@PathVariable("file") String fi ) {
