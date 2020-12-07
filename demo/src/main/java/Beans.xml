@@ -33,6 +33,22 @@
       class="com.example.demo.RestaurantJDBCTemplate">
       <property name="dataSource"  ref="dataSource" />    
    </bean>
-
-
+   <!-- Definition for ServiceTimeJDBCTemplate bean -->
+   <bean id="ServiceTimeJDBCTemplate" 
+      class="com.example.demo.ServiceTimeJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <!-- Definition for ServiceTimeJDBCTemplate bean -->
+   <bean id="ServiceJDBCTemplate" 
+      class="com.example.demo.ServiceJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <bean id="inAirJDBCTemplate" 
+      class="com.example.demo.inAirJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <bean id="inWeatherJDBCTemplate" 
+      class="com.example.demo.inWeatherJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
 </beans>
