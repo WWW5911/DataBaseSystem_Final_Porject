@@ -28,7 +28,7 @@ public class WeatherJDBCTemplate implements WeatherDAO {
     }
     @SuppressWarnings("deprecation")
     public Weather getWeather(Integer ID) {
-        String SQL = "select * from Weather where SiteID = ?";
+        String SQL = "select * from Weather where ID = ?";
         Weather weather = jdbcTemplateObject.queryForObject(SQL, new Object[]{ID}, new WeatherMapper());
         return weather;
     }
