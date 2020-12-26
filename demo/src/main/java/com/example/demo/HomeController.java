@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -24,13 +23,14 @@ import com.example.Service.*;
 
 @RestController
 public class HomeController {
-    ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
-    SchoolHighterJDBCTemplate schoolHighterJDBCTemplate = (SchoolHighterJDBCTemplate) context.getBean("schoolHighterJDBCTemplate");
-    AQIJDBCTemplate aqiJDBCTemplate = (AQIJDBCTemplate) context.getBean("AQIJDBCTemplate");
-    WeatherJDBCTemplate weatherJDBCTemplate = (WeatherJDBCTemplate) context.getBean("WeatherJDBCTemplate");
-    RestaurantJDBCTemplate restaurantJDBCTemplate = (RestaurantJDBCTemplate) context.getBean("RestaurantJDBCTemplate");
-    ServiceTimeJDBCTemplate serviceTimeJDBCTemplate = (ServiceTimeJDBCTemplate) context.getBean("ServiceTimeJDBCTemplate");
-    ServiceJDBCTemplate serviceJDBCTemplate = (ServiceJDBCTemplate) context.getBean("ServiceJDBCTemplate");
+    static ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+    static SchoolHighterJDBCTemplate schoolHighterJDBCTemplate = (SchoolHighterJDBCTemplate) context.getBean("schoolHighterJDBCTemplate");
+    static AQIJDBCTemplate aqiJDBCTemplate = (AQIJDBCTemplate) context.getBean("AQIJDBCTemplate");
+    static WeatherJDBCTemplate weatherJDBCTemplate = (WeatherJDBCTemplate) context.getBean("WeatherJDBCTemplate");
+    static RestaurantJDBCTemplate restaurantJDBCTemplate = (RestaurantJDBCTemplate) context.getBean("RestaurantJDBCTemplate");
+    static ServiceTimeJDBCTemplate serviceTimeJDBCTemplate = (ServiceTimeJDBCTemplate) context.getBean("ServiceTimeJDBCTemplate");
+    static ServiceJDBCTemplate serviceJDBCTemplate = (ServiceJDBCTemplate) context.getBean("ServiceJDBCTemplate");
+    static MixedResultJDBCTemplate mixedResultJDBCTemplate = (MixedResultJDBCTemplate) context.getBean("MixedResultJDBCTemplate");
 
     List<SchoolHighter> students = schoolHighterJDBCTemplate.listSchoolHighters();
     List<AQI> aqis = aqiJDBCTemplate.listAQIs();
@@ -42,7 +42,6 @@ public class HomeController {
     AES_CBC_PK5 aPk5 = new AES_CBC_PK5();
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
 
     }
     
@@ -187,4 +186,10 @@ public class HomeController {
             str += "S_ID : " + service.getS_ID() + ", R_ID : " + service.getR_ID() +"\n" ;
         return str;
     }
+    @RequestMapping(path = "/api/Request/{id}")
+    public String getRequest( @PathVariable("id") String str  ){
+        return reply.SelectResult(str);
+    }
+
+    
 }

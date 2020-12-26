@@ -9,6 +9,7 @@ public class AQI {
     private double AQI;
     private String Status;
     private double PM25;
+    private int time;
 
     public void setSiteId(int siteId) {
         this.SiteId = siteId;
@@ -58,5 +59,12 @@ public class AQI {
     }
     public double getPM25() {
         return PM25;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+    public double getTime() {
+        return time;
     }
 }

@@ -51,4 +51,11 @@
       class="com.example.demo.inWeatherJDBCTemplate">
       <property name="dataSource"  ref="dataSource" />    
    </bean>
+   <!--MixedResultJDBCTemplate-->
+   <bean id="MixedResultJDBCTemplate" 
+      class="com.example.demo.MixedResultJDBCTemplate">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+
+
 </beans>

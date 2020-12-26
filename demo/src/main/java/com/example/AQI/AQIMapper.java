@@ -15,6 +15,7 @@ public class AQIMapper implements RowMapper<AQI> {
       aqi.setAQI(rs.getFloat("AQI"));
       aqi.setStatus(rs.getString("Status"));
       aqi.setPM25(rs.getFloat("PM25"));
+      //aqi.setTime(rs.getInt("time"));
       return aqi;
    }
 }

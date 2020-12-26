@@ -19,12 +19,13 @@ public class AQIJDBCTemplate implements AQIDAO {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
 
-    public void create(int SiteID, String SiteName, String S_city, float S_latitude, float S_longitude, float AQI, String Status, float PM25) {
-        String SQL = "insert into AQI (SiteID, SiteName, S_city, S_latitude, S_longitude, AQI, Status, PM25) values (?, ?, ?, ?, ?, ?, ?, ?)";     
-        jdbcTemplateObject.update( SQL, SiteID, SiteName, S_city, S_latitude, S_longitude, AQI, Status, PM25);
+    public void create(int SiteID, String SiteName, String S_city, float S_latitude, float S_longitude, float AQI, String Status, float PM25, int time) {
+        String SQL = "insert into AQI (SiteID, SiteName, S_city, S_latitude, S_longitude, AQI, Status, PM25, time) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";     
+        jdbcTemplateObject.update( SQL, SiteID, SiteName, S_city, S_latitude, S_longitude, AQI, Status, PM25, time);
         System.out.println("Created Record SiteID = " + SiteID + " SiteName = " + SiteName + " S_city = " + S_city
-                            + " S_latitude = " + S_latitude + " S_longitude = " + S_longitude + " AQI = " + AQI + " Status = " + Status + " PM25 = " + PM25);
+                            + " S_latitude = " + S_latitude + " S_longitude = " + S_longitude + " AQI = " + AQI + " Status = " + Status + " PM25 = " + PM25 + " time = " + time);
         return;
+        
     }
     @SuppressWarnings("deprecation")
     public AQI getAQI(Integer SiteID) {

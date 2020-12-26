@@ -6,7 +6,7 @@ import javax.sql.DataSource;
 public interface AQIDAO {
     public void setDataSource(DataSource ds);
 
-    public void create(int SiteID, String SiteName, String S_city, float S_latitude, float S_longitude, float AQI, String Status, float PM25);
+    public void create(int SiteID, String SiteName, String S_city, float S_latitude, float S_longitude, float AQI, String Status, float PM25, int time);
 
     public AQI getAQI(Integer SiteID);
 
