@@ -191,5 +191,14 @@ public class HomeController {
         return reply.SelectResult(str);
     }
 
-    
+    @RequestMapping(path = "/api/updateAQI")
+    public String updateAQI( ){
+        UpdateData.update_AQI();
+        return "updated";
+    }
+    @RequestMapping(path = "/api/updateWeather")
+    public String updateWeather( ){
+        UpdateData.update_weather();
+        return "updated";
+    }
 }

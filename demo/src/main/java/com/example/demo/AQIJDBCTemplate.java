@@ -46,7 +46,7 @@ public class AQIJDBCTemplate implements AQIDAO {
         return;
     }
     public void update(Integer SiteID, float AQI, String Status, float PM25){
-        String SQL = "update AQI set AQI = ?, set Status = ?, set PM25 = ?  where SiteID = ?";
+        String SQL = "update AQI set AQI = ?, Status = ?, PM25 = ?  where SiteID = ?";
         jdbcTemplateObject.update(SQL, AQI, Status, PM25, SiteID);
         System.out.println("Updated Record with SiteID = " + SiteID );
         return;

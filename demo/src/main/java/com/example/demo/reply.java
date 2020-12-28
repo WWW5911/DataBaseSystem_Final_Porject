@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -16,7 +18,14 @@ public class reply {
         double lo = st.hasMoreTokens() ? Double.parseDouble(st.nextToken()) : 0;
         String order = st.hasMoreTokens() ? st.nextToken() : "";
         String need = st.hasMoreTokens() ? st.nextToken() : "";
-        int time = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : 0;
+        int time = st.hasMoreTokens() ? Integer.parseInt(st.nextToken())*100 : 0;
+        Date myDate = new Date();
+        @SuppressWarnings("deprecation")
+        int currentTime = ( myDate.getHours()*100 + myDate.getMinutes());
+        Calendar c = Calendar.getInstance();
+        c.setTime(myDate); 
+        int Week = c.get(Calendar.DAY_OF_WEEK)-1; 
+
         int [] weight = new int[8];
         boolean [] btmp = new boolean[8];
         int i = 0;
@@ -43,18 +52,18 @@ public class reply {
             ne_status = need.charAt(10)-'0', flag = 0;
         String ne_WX = "", ne_STAT = "";
         if(ne_weather == 1)  ne_WX = "晴";
-        else if(ne_weather == 2) ne_WX = "雲";
+        else if(ne_weather == 2) ne_WX = "陰";
         else if(ne_weather == 3) ne_WX = "雨";
         if(ne_status == 1) 
             ne_STAT = "良";
         else ne_STAT = "普";
-        String sql = "select distinct  r.ID, r.latitude, r.longitude, r.name, r.Address, r.rating, week, openTime, closeTime, AQI, Status, startTime, Wx, pop, temperature, AvgAt from (select * from Restaurant, Service where Restaurant.ID = Service.R_ID) as r inner join ServiceTime on r.S_ID = ServiceTime.ID inner join (select * from inAir inner join AQI on inAir.A_SiteId = AQI.SiteId ) as a on r.ID = a.R_ID  inner join (select * from inWeather inner join Weather on inWeather.W_ID = Weather.ID ) as w on r.ID = w.R_ID where ";
+        String sql = "select distinct top 100 r.ID, r.latitude, r.longitude, r.name, r.Address, r.rating, week, openTime, closeTime, AQI, Status, startTime, Wx, pop, temperature, AvgAt, (  (r.latitude - 25.0335)*(r.latitude -25.0335) + (r.longitude -121.4322)*(r.longitude -121.4322) ) as t from (select * from Restaurant, Service where Restaurant.ID = Service.R_ID) as r inner join ServiceTime on r.S_ID = ServiceTime.ID inner join (select * from inAir inner join AQI on inAir.A_SiteId = AQI.SiteId ) as a on r.ID = a.R_ID  inner join (select * from inWeather inner join Weather on inWeather.W_ID = Weather.ID ) as w on r.ID = w.R_ID where ";
         String [] where = new String[8];
         for(int k = 0; k < 8; ++k)
             where[k] = "";
         if(ne_rating != 0) where[0] = "rating >= " + ne_rating ;
-        if(ne_km != 0) where[1] = " (  (r.latitude - "+  la + ")*(r.latitude -"+  la + ") + (r.longitude -"+ lo +")*(r.longitude -"+ lo +") ) <= " + (double)(ne_km/100);
-        else where[1] = " (  (r.latitude - "+  la + ")*(r.latitude -"+  la + ") + (r.longitude -"+ lo +")*(r.longitude -"+ lo +") ) <= " + (double)(4/100);
+        if(ne_km != 0) where[1] = " (  (r.latitude - "+  lo + ")*(r.latitude -"+  lo + ") + (r.longitude -"+ la +")*(r.longitude -"+ la +") )*1000 <= " + ne_km;
+        else where[1] = " (  (r.latitude - "+  lo + ")*(r.latitude -"+  lo + ") + (r.longitude -"+ la +")*(r.longitude -"+ la +") )*1000 <= " + 4;
         if(ne_weather != 0) where[2] = " Wx  like '%" + ne_WX + "%'";
         if(ne_pop != 0) where[3] = " pop <= " + ne_pop ;
         if(ne_temp != 0) where[4] = " temperature <= " + ne_temp;
@@ -66,6 +75,17 @@ public class reply {
             if(flag++ != 0) sql += " and ";
             sql += where[k];
         }
+        if(time >= 2500){
+            if(flag++ != 0) sql += " and ";
+            sql += "openTime < " + currentTime  ;
+            sql += "and startTime <= "+ (currentTime/100) + " and (endTime > " + (currentTime/100) + " or (endTime = 0 and endTime+24 > " + (currentTime/100) + ")) " ;
+        }else if (time < 2500){
+            if(flag++ != 0) sql += " and ";
+            sql += "openTime < " + time ;
+            sql += "and startTime <= "+ (time/100) + " and (endTime > " + (time/100) + " or (endTime = 0 and endTime+24 > " + (time/100) + ")) " ;
+        }
+        if(flag++ != 0) sql += " and ";
+        sql += "week = " + Week + " order by  t";
         System.out.println(sql);
         // 取得select結果物件 ( 只找la lo之平方和開根號 < 4或指定 (1度為100公里) where 搜尋條件)
         List<MixedResult> mrlist = HomeController.mixedResultJDBCTemplate.listMixedResults(sql);

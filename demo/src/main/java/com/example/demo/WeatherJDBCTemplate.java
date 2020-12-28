@@ -45,7 +45,7 @@ public class WeatherJDBCTemplate implements WeatherDAO {
         return;
     }
     public void update(int ID, String date, String Wx, int pop, double temperature, double AvgAt){
-        String SQL = "update Weather set date = ?, set Wx = ?, set pop = ?, set temperature = ?, set AvgAt = ?,  where ID = ?";
+        String SQL = "update Weather set date = ?,  Wx = ?,  pop = ?,  temperature = ?,  AvgAt = ?  where ID = ?";
         jdbcTemplateObject.update(SQL, date, Wx, pop, temperature, AvgAt, ID);
         System.out.println("Updated Record with SiteID = " + ID );
         return;
