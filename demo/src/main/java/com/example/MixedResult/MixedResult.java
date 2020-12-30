@@ -21,6 +21,6 @@ public class MixedResult{
         return weight;
     }
     public String toQuery(){
-        return ID + ", " + name + ", " + Address + ", " + rating + ", " + Air + ", " + Status + ", " + Wx + ", " + pop + ", " + temperature + ", " + AvgAt;
+        return ID + "@ " + name + "@ " + Address + "@ " + rating + "@ " + Air + "@ " + Status + "@ " + Wx + "@ " + pop + "@ " + temperature + "@ " + AvgAt + "@ " + openTime + "@ " + closeTime;
     }
 }

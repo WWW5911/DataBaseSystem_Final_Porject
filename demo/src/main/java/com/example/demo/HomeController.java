@@ -188,9 +188,12 @@ public class HomeController {
     }
     @RequestMapping(path = "/api/Request/{id}")
     public String getRequest( @PathVariable("id") String str  ){
-        return reply.SelectResult(str);
+        return reply.SelectResult(str, 1);
     }
-
+    @RequestMapping(path = "/api/Request/json/{id}")
+    public String getRequestJson( @PathVariable("id") String str  ){
+        return reply.SelectResult(str, 2);
+    }
     @RequestMapping(path = "/api/updateAQI")
     public String updateAQI( ){
         UpdateData.update_AQI();
